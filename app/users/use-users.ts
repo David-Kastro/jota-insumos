@@ -10,6 +10,7 @@ export const useUsers = () => {
 
   useEffect(() => {
     listClientes();
+    listUsers();
   }, []);
 
   // Listar clientes de procedimento
