@@ -5,6 +5,7 @@ import { List, Plus, Syringe } from "lucide-react";
 import { ProcedimentoControle, useProcedimentos } from "./use-procedimentos";
 import { useState } from "react";
 import { AddProcedimentoDialog } from "./add-procedimento-dialog";
+import { toast } from "sonner";
 
 export function ProcedimentosTemplate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,7 +80,14 @@ export function ProcedimentosTemplate() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setTimeout(() => {
+                    toast.error("Nao foi possivel listar os procedimentos");
+                  }, 1000);
+                }}
+              >
                 <List />
                 Listar procedimentos
               </Button>
