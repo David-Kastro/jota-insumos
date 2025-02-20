@@ -37,7 +37,7 @@ export const AddProcedimentoDialog: FC<AddProcedimentoDialogProps> = ({
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent loading={loading}>
         <DialogHeader>
-          <DialogTitle>Criar Novo Insumo</DialogTitle>
+          <DialogTitle>Criar novo controle</DialogTitle>
           <DialogDescription>
             {/* ...existing instructions... */}
           </DialogDescription>
