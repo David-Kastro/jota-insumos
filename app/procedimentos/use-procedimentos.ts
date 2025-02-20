@@ -53,7 +53,9 @@ export const useProcedimentos = () => {
     listControles();
   };
 
-  async function addControle(values: ProcedimentoControle): Promise<boolean> {
+  async function addControle(
+    values: Omit<ProcedimentoControle, "id">
+  ): Promise<boolean> {
     setLoading(true);
     const { error } = await supabase.from("[JOTA] - Controle").insert([values]);
     setLoading(false);

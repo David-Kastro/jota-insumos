@@ -12,7 +12,7 @@ import { ProcedimentoControle } from "./use-procedimentos";
 type AddProcedimentoDialogProps = {
   open: boolean;
   loading: boolean;
-  onSave: (values: ProcedimentoControle) => void;
+  onSave: (values: Omit<ProcedimentoControle, "id">) => void;
   onClose: () => void;
 };
 
@@ -20,19 +20,12 @@ export const AddProcedimentoDialog: FC<AddProcedimentoDialogProps> = ({
   open,
   onClose,
   loading,
-  // onSave,
+  onSave,
 }) => {
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const data = new FormData(e.currentTarget);
-  //   onSave({
-  //     name: data.get("nome") as string,
-  //     unit_measure: data.get("unit_measure"),
-  //     qtd_by_unit: parseInt(data.get("qtd_by_unit") as string),
-  //     total_units: parseInt(data.get("total_units") as string),
-  //   } as ProcedimentoControle);
-  //   onClose();
-  // };
+  const handleSave = async (values: Omit<ProcedimentoControle, "id">) => {
+    await onSave(values);
+    onClose();
+  };
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent loading={loading}>
@@ -42,7 +35,7 @@ export const AddProcedimentoDialog: FC<AddProcedimentoDialogProps> = ({
             {/* ...existing instructions... */}
           </DialogDescription>
         </DialogHeader>
-        <ProcedureControlForm />
+        <ProcedureControlForm onSave={handleSave} />
       </DialogContent>
     </Dialog>
   );

@@ -22,7 +22,7 @@ export type ClientType = {
   age: number;
   name: string;
   phone: string;
-  ocupation: string;
+  occupation: string;
   created_at: Date;
 };
 

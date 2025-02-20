@@ -10,7 +10,9 @@ export function ProcedimentosTemplate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, addControle, loading } = useProcedimentos();
 
-  const handleCreateProcedimento = async (values: ProcedimentoControle) => {
+  const handleCreateProcedimento = async (
+    values: Omit<ProcedimentoControle, "id">
+  ) => {
     const added = await addControle(values);
     if (added) {
       setIsModalOpen(false);

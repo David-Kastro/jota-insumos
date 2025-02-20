@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -29,13 +30,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ClientForm from "@/components/client-form";
-import { toast } from "sonner";
 import UserForm from "./user-form";
-
-type Client = {
-  id: string;
-  name: string;
-};
+import { useUsers } from "@/app/users/use-users";
+import { ProcedimentoControle } from "@/app/procedimentos/use-procedimentos";
 
 type FormData = {
   clientId: string;
@@ -45,7 +42,11 @@ type FormData = {
   procedurePlan: string;
 };
 
-export default function ProcedureControlForm() {
+export default function ProcedureControlForm({
+  onSave,
+}: {
+  onSave: (data: Omit<ProcedimentoControle, "id">) => void;
+}) {
   const {
     register,
     handleSubmit,
@@ -54,30 +55,30 @@ export default function ProcedureControlForm() {
   } = useForm<FormData>();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
-  const [clients, setClients] = useState<Client[]>([
-    // { id: "1", name: "João Silva" },
-    // { id: "2", name: "Maria Santos" },
-  ]);
-  const [users, setUsers] = useState<Client[]>([
-    // { id: "1", name: "João Silva" },
-    // { id: "2", name: "Maria Santos" },
-  ]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDialogUserOpen, setIsDialogUserOpen] = useState(false);
 
+  const { clients, users, addClient, addUser, loading } = useUsers();
+
   const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Here you would typically send the data to your backend
-    toast.error("Erro ao criar controle! Tente novamente.");
+    const newControl: Omit<ProcedimentoControle, "id"> = {
+      client_id: Number(data.clientId),
+      user_id: Number(data.userId),
+      date_start: data.startDate,
+      date_end: data.endDate,
+      procedure_plan: data.procedurePlan,
+    };
+
+    onSave(newControl);
   };
 
-  const handleAddClient = (newClient: Client) => {
-    setClients([...clients, newClient]);
+  const handleAddClient = async (newClient: any) => {
+    await addClient(newClient);
     setIsDialogOpen(false);
   };
 
-  const handleAddUser = (newClient: Client) => {
-    setUsers([...users, newClient]);
+  const handleAddUser = async (newClient: any) => {
+    await addUser(newClient);
     setIsDialogUserOpen(false);
   };
 
@@ -92,7 +93,7 @@ export default function ProcedureControlForm() {
             </SelectTrigger>
             <SelectContent>
               {clients.map((client) => (
-                <SelectItem key={client.id} value={client.id}>
+                <SelectItem key={client.id} value={client.id + ""}>
                   {client.name}
                 </SelectItem>
               ))}
@@ -105,7 +106,7 @@ export default function ProcedureControlForm() {
               Adicionar Cliente
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent loading={loading}>
             <DialogHeader>
               <DialogTitle>Adicionar Novo Cliente</DialogTitle>
             </DialogHeader>
@@ -123,7 +124,7 @@ export default function ProcedureControlForm() {
             </SelectTrigger>
             <SelectContent>
               {users.map((user) => (
-                <SelectItem key={user.id} value={user.id}>
+                <SelectItem key={user.id} value={user.id + ""}>
                   {user.name}
                 </SelectItem>
               ))}
@@ -136,7 +137,7 @@ export default function ProcedureControlForm() {
               Adicionar Médico
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent loading={loading}>
             <DialogHeader>
               <DialogTitle>Adicionar Novo médico</DialogTitle>
             </DialogHeader>
