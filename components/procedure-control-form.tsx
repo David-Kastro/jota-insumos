@@ -63,6 +63,7 @@ export default function ProcedureControlForm() {
     // { id: "2", name: "Maria Santos" },
   ]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogUserOpen, setIsDialogUserOpen] = useState(false);
 
   const onSubmit = (data: FormData) => {
     console.log(data);
@@ -76,8 +77,8 @@ export default function ProcedureControlForm() {
   };
 
   const handleAddUser = (newClient: Client) => {
-    setUsers([...clients, newClient]);
-    setIsDialogOpen(false);
+    setUsers([...users, newClient]);
+    setIsDialogUserOpen(false);
   };
 
   return (
@@ -129,7 +130,7 @@ export default function ProcedureControlForm() {
             </SelectContent>
           </Select>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogUserOpen} onOpenChange={setIsDialogUserOpen}>
           <DialogTrigger asChild>
             <Button type="button" variant="outline">
               Adicionar Médico
