@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { ClientType, UserType } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -11,20 +12,31 @@ export type ProcedimentoControle = {
   user_id: number;
 };
 
+export type ProcedimentoControleList = {
+  id: number;
+  date_start: Date;
+  date_end: Date;
+  procedure_plan: string;
+  client_id: number;
+  user_id: number;
+  client: ClientType;
+  user: UserType;
+};
+
 export const useProcedimentos = () => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<ProcedimentoControle[]>([]);
+  const [data, setData] = useState<ProcedimentoControleList[]>([]);
 
   useEffect(() => {
     listControles();
   }, []);
 
   // Listar controles de procedimento
-  async function listControles(): Promise<ProcedimentoControle[]> {
+  async function listControles(): Promise<ProcedimentoControleList[]> {
     setLoading(true);
     const { data, error } = await supabase
       .from("[JOTA] - Controle")
-      .select("*");
+      .select(`*, "client":"[JOTA] - Clientes"(*), "user":"[JOTA] - Users"(*)`);
     setLoading(false);
 
     if (error) {

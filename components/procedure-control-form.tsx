@@ -29,6 +29,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ClientForm from "@/components/client-form";
+import { toast } from "sonner";
+import UserForm from "./user-form";
 
 type Client = {
   id: string;
@@ -37,6 +39,7 @@ type Client = {
 
 type FormData = {
   clientId: string;
+  userId: string;
   startDate: Date;
   endDate: Date;
   procedurePlan: string;
@@ -55,16 +58,25 @@ export default function ProcedureControlForm() {
     // { id: "1", name: "João Silva" },
     // { id: "2", name: "Maria Santos" },
   ]);
+  const [users, setUsers] = useState<Client[]>([
+    // { id: "1", name: "João Silva" },
+    // { id: "2", name: "Maria Santos" },
+  ]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const onSubmit = (data: FormData) => {
     console.log(data);
     // Here you would typically send the data to your backend
-    alert("Formulário enviado com sucesso!");
+    toast.error("Erro ao criar controle! Tente novamente.");
   };
 
   const handleAddClient = (newClient: Client) => {
     setClients([...clients, newClient]);
+    setIsDialogOpen(false);
+  };
+
+  const handleAddUser = (newClient: Client) => {
+    setUsers([...clients, newClient]);
     setIsDialogOpen(false);
   };
 
@@ -97,6 +109,37 @@ export default function ProcedureControlForm() {
               <DialogTitle>Adicionar Novo Cliente</DialogTitle>
             </DialogHeader>
             <ClientForm onAddClient={handleAddClient} />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="flex items-end space-x-4">
+        <div className="flex-grow">
+          <Label htmlFor="clientSelect">Médico</Label>
+          <Select onValueChange={(value) => setValue("userId", value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione um cliente" />
+            </SelectTrigger>
+            <SelectContent>
+              {users.map((user) => (
+                <SelectItem key={user.id} value={user.id}>
+                  {user.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button type="button" variant="outline">
+              Adicionar Médico
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Adicionar Novo médico</DialogTitle>
+            </DialogHeader>
+            <UserForm onAddClient={handleAddUser} />
           </DialogContent>
         </Dialog>
       </div>

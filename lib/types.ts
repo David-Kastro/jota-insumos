@@ -16,3 +16,20 @@ export type ControleType = {
   user_id: number;
   created_at?: Date;
 };
+
+export type ClientType = {
+  id: number;
+  age: number;
+  name: string;
+  phone: string;
+  ocupation: string;
+  created_at: Date;
+};
+
+export type UserType = {
+  id: number;
+  crm: string;
+  name: string;
+  avatar: string | null;
+  created_at: Date;
+};
