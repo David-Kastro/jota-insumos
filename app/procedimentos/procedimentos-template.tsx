@@ -40,7 +40,7 @@ export function ProcedimentosTemplate() {
       <div className="w-full flex">
         <Button variant="outline">
           <Plus />
-          Adicionar insumo
+          Adicionar controle
         </Button>
       </div>
 
