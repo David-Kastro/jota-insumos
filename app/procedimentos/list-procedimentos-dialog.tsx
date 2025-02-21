@@ -26,7 +26,7 @@ export function ListProcedimentosDialog({
         <DialogHeader>
           <DialogTitle>Procedimentos</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 mt-4 max-h-[300px] overflow-y-auto">
+        <div className="space-y-4 mt-4 max-h-[480px] overflow-y-auto">
           {!procedimentos.length && (
             <div className="font-medium text-muted-foreground">
               Nenhum procedimento registrado ainda
