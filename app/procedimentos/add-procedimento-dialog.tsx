@@ -1,42 +1,47 @@
-import { FC } from "react";
+"use client";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
-import ProcedureControlForm from "@/components/procedure-control-form";
-import { ProcedimentoControle } from "./use-procedimentos";
+
+import { ProcedimentoFormData, ProcedureForm } from "./procedure-form";
+import { InsumosType } from "@/lib/types";
 
 type AddProcedimentoDialogProps = {
   open: boolean;
-  loading: boolean;
-  onSave: (values: Omit<ProcedimentoControle, "id">) => void;
   onClose: () => void;
+  insumos: InsumosType[];
+  loading: boolean;
+  onSave: (values: ProcedimentoFormData) => void;
 };
 
-export const AddProcedimentoDialog: FC<AddProcedimentoDialogProps> = ({
+export function AddProcedimentoDialog({
   open,
   onClose,
   loading,
+  insumos,
   onSave,
-}) => {
-  const handleSave = async (values: Omit<ProcedimentoControle, "id">) => {
+}: AddProcedimentoDialogProps) {
+  const handleSave = async (values: ProcedimentoFormData) => {
     await onSave(values);
     onClose();
   };
+
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent loading={loading}>
         <DialogHeader>
-          <DialogTitle>Criar novo controle</DialogTitle>
-          <DialogDescription>
-            {/* ...existing instructions... */}
-          </DialogDescription>
+          <DialogTitle>Cadastro de Procedimento</DialogTitle>
         </DialogHeader>
-        <ProcedureControlForm onSave={handleSave} />
+        <ProcedureForm
+          onSave={handleSave}
+          insumos={insumos}
+          loading={loading}
+        />
       </DialogContent>
     </Dialog>
   );
-};
+}

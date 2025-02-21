@@ -12,7 +12,7 @@ type ClientFormData = {
 };
 
 type ClientFormProps = {
-  onAddClient: (client: { id: string; name: string }) => void;
+  onAddClient: (client: { name: string }) => void;
 };
 
 export default function ClientForm({ onAddClient }: ClientFormProps) {
@@ -25,7 +25,6 @@ export default function ClientForm({ onAddClient }: ClientFormProps) {
   const onSubmit = (data: ClientFormData) => {
     // Here you would typically send the data to your backend and get a new ID
     const newClient = {
-      id: Date.now().toString(), // This is a temporary ID generation method
       name: data.name,
       age: data.age,
       occupation: data.occupation,

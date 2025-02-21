@@ -30,7 +30,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ClientForm from "@/components/client-form";
-import UserForm from "./user-form";
+import UserForm from "@/components/user-form";
 import { useUsers } from "@/app/users/use-users";
 import { ProcedimentoControle } from "@/app/procedimentos/use-procedimentos";
 
@@ -42,7 +42,7 @@ type FormData = {
   procedurePlan: string;
 };
 
-export default function ProcedureControlForm({
+export function ProcedureControlForm({
   onSave,
 }: {
   onSave: (data: Omit<ProcedimentoControle, "id">) => void;
@@ -120,7 +120,7 @@ export default function ProcedureControlForm({
           <Label htmlFor="clientSelect">Médico</Label>
           <Select onValueChange={(value) => setValue("userId", value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Selecione um cliente" />
+              <SelectValue placeholder="Selecione um médico" />
             </SelectTrigger>
             <SelectContent>
               {users.map((user) => (
@@ -141,7 +141,7 @@ export default function ProcedureControlForm({
             <DialogHeader>
               <DialogTitle>Adicionar Novo médico</DialogTitle>
             </DialogHeader>
-            <UserForm onAddClient={handleAddUser} />
+            <UserForm onAddUser={handleAddUser} />
           </DialogContent>
         </Dialog>
       </div>
