@@ -23,9 +23,8 @@ export function ProcedimentosTemplate() {
     useState(false);
   const [selectedProcedimento, setSelectedProcedimento] =
     useState<ProcedimentoControleList | null>(null);
-  const { data, addControle, addProcedimento, addInsumosUsados, loading } =
-    useProcedimentos();
-  const { data: insumos } = useInsumos();
+  const { data, addControle, addProcedimento, loading } = useProcedimentos();
+  const { data: insumos, addInsumosUsados } = useInsumos();
 
   const handleCreateControl = async (
     values: Omit<ProcedimentoControle, "id">

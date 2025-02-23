@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabase";
 import {
   AddProcedimentoType,
   ClientType,
-  InsumosType,
   ProcedimentoComInsumosType,
   UserType,
 } from "@/lib/types";
@@ -92,71 +91,9 @@ export const useProcedimentos = () => {
       toast.error("Erro ao adicionar procedimento");
       throw new Error("Erro ao adicionar procedimento");
     }
-
+    refetch();
     toast.success("Procedimento adicionado com sucesso");
     return data[0].id;
-  }
-
-  async function addInsumosUsados(
-    insumos: InsumosType[],
-    values: {
-      procedure_id: number;
-      control_id: number;
-      client_id: number;
-      user_id: number;
-      supplies: { supply_id: number; qtd: number }[];
-    }
-  ) {
-    setLoading(true);
-
-    const requests = values.supplies.map(async (item) => {
-      const insumo = insumos.find((i) => i.id === item.supply_id);
-
-      if (!insumo) {
-        return;
-      }
-
-      const insumoTotalAvailable =
-        insumo.total_available || insumo.qtd_by_unit * insumo.total_units;
-      let insumoNewTotal = insumoTotalAvailable - Number(item.qtd);
-      insumoNewTotal = insumoNewTotal < 0 ? 0 : insumoNewTotal;
-
-      const insumoNewTotalUnits = Math.ceil(
-        insumoNewTotal / insumo.qtd_by_unit
-      );
-
-      const { error: insumoUpdateError } = await supabase
-        .from("[JOTA] - Insumos")
-        .update({
-          total_available: insumoNewTotal,
-          total_units: insumoNewTotalUnits,
-        })
-        .eq("id", insumo.id);
-
-      if (insumoUpdateError) {
-        toast.error("Erro ao atualizar insumo");
-        throw new Error("Erro ao atualizar insumo");
-      }
-
-      const { error } = await supabase.from("[JOTA] - Insumos usados").insert({
-        supply_id: item.supply_id,
-        control_id: values.control_id,
-        procedure_id: values.procedure_id,
-        client_id: values.client_id,
-        user_id: values.user_id,
-        qtd: Number(item.qtd),
-      });
-
-      if (error) {
-        toast.error("Erro ao adicionar insumo usado");
-        throw new Error("Erro ao adicionar insumo usado");
-      }
-    });
-
-    await Promise.all(requests);
-    setLoading(false);
-    refetch();
-    return true;
   }
 
   async function deleteControle(id: number): Promise<boolean> {
@@ -181,7 +118,6 @@ export const useProcedimentos = () => {
     listControles,
     addControle,
     addProcedimento,
-    addInsumosUsados,
     deleteControle,
     loading,
     data,
